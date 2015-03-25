@@ -1,12 +1,16 @@
-int i = 0;
+int potPins[] = {0,1,2};
 
 void setup() {
   Serial.begin(9600);
 }
 
 void loop() {
-  Serial.println(String(i) + ',' + String(i) + ',' + String(i));
-  i++;
-  delay(100);
+  for (int i = 0; i < 3; i = i + 1) {
+    int speed = map(analogRead(potPins[i]), 0, 1023, 0, 128);
+    Serial.print(speed);
+    if(i < 2) Serial.print(',');
+  }
+  Serial.print('\n');
+  delay(99);
 }
 
