@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Arduino Projection Mapping</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/style.css">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+</head>
+<body>
+
+<video width="400" loop autoplay muted>
+    <source src="http://upload.wikimedia.org/wikipedia/commons/4/4e/Plasma_globe_23s.webm" type="video/webm">
+</video>
+
+<video width="400" loop autoplay muted>
+    <source src="http://upload.wikimedia.org/wikipedia/commons/4/4e/Plasma_globe_23s.webm" type="video/webm">
+</video>
+
+<video width="400" loop autoplay muted>
+    <source src="http://upload.wikimedia.org/wikipedia/commons/4/4e/Plasma_globe_23s.webm" type="video/webm">
+</video>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io('http://localhost:3006');
+    socket.on('data', function (data) {
+        $('video')[0].playbackRate = data[0];
+        $('video')[1].playbackRate = data[1];
+        $('video')[2].playbackRate = data[2];
+    });
+</script>
+</body>
+</html>
