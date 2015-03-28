@@ -7,6 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Steven Hernandez",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/StevenmHernandez/Arduino-Projection-Mapping"
+  },
   "dependencies": {
     "express": "^4.12.3",
     "serialport": "^1.6.3",

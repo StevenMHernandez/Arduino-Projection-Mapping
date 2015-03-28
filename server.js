@@ -1,4 +1,5 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var serialport = require("serialport");
@@ -20,8 +21,14 @@ sp.on("open", function () {
   });
 });
 
+app.use('/assets', express.static(__dirname + '/public/assets'));
+
 server.listen(3006);
 
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/public/index.html');
+});
+
+app.get('/getPaths', function (req, res) {
+  res.sendfile(__dirname + '/public/getPaths.html');
 });

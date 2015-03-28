@@ -1,0 +1,20 @@
+{
+  "name": "arduino-projection-mapping",
+  "version": "1.0.0",
+  "homepage": "https://github.com/StevenmHernandez/Arduino-Projection-Mapping",
+  "authors": [
+    "StevenmHernandez <contact@stevenHdesigns.com>"
+  ],
+  "main": "server.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.3",
+    "requirejs": "~2.1.16"
+  }
+}
