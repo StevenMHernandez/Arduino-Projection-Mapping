@@ -10,6 +10,12 @@ define(['shapes', 'socketio'],
   function (Shapes, io) {
 
     var setup = function () {
+      config = {
+        offset: {
+          x: 0,
+          y: 0
+        }
+      };
       $window = $(window);
       $projection = $('#projection');
       $video = $('video');
@@ -31,22 +37,47 @@ define(['shapes', 'socketio'],
     };
 
     var render = function () {
+      ctx.rect(0, 0, $projection.attr('width'), $projection.attr('height'));
+      ctx.fillStyle = 'black';
+      ctx.fill();
       Shapes.paths.forEach(function (value, index) {
         ctx.save();
         ctx.beginPath();
         Shapes.paths[index].forEach(function (value, index, array) {
           if (index == 0) {
-            ctx.moveTo(value[0] * $projection.attr('width'), value[1] * $projection.attr('height'));
+            ctx.moveTo(value[0] * $projection.attr('width') + config.offset.x,
+              value[1] * $projection.attr('height') + config.offset.y);
           }
           else {
-            ctx.lineTo(value[0] * $projection.attr('width'), value[1] * $projection.attr('height'));
+            ctx.lineTo(value[0] * $projection.attr('width') + config.offset.x,
+              value[1] * $projection.attr('height') + config.offset.y);
           }
         });
         ctx.closePath();
         ctx.clip();
-        ctx.drawImage($video[ index%$video.length ], 0, 0, $projection.attr('width'), $projection.attr('height'));
+        ctx.drawImage($video[index % $video.length], 0, 0, $projection.attr('width'), $projection.attr('height'));
         ctx.restore();
       })
+    };
+
+    var shiftCanvas = function (e) {
+      switch (e.which) {
+        case 37: // left
+          config.offset.x--;
+          break;
+        case 38: // up
+          config.offset.y--;
+          break;
+        case 39: // right
+          config.offset.x++;
+          break;
+        case 40: // down
+          config.offset.y++;
+          break;
+        default:
+          return;
+      }
+      e.preventDefault(); // prevent the default action (scroll / move caret)
     };
 
     var updateSpeed = function (data) {
@@ -57,10 +88,16 @@ define(['shapes', 'socketio'],
 
     var run = function () {
       setup();
-      setInterval(function(){
+
+      setInterval(function () {
         render();
       }, 99);
+
+      $(document).keydown(function (e) {
+        shiftCanvas(e)
+      });
     };
+
     run();
   }
 );
