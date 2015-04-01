@@ -14,6 +14,10 @@ define(['shapes', 'socketio'],
         offset: {
           x: 0,
           y: 0
+        },
+        stretch: {
+          x: 1,
+          y: 1
         }
       };
       $window = $(window);
@@ -24,7 +28,7 @@ define(['shapes', 'socketio'],
     };
 
     var setupCanvas = function () {
-      $projection.attr('height', $window.width() * (9 / 16));
+      $projection.attr('height', $window.height());
       $projection.attr('width', $window.width());
       ctx = $projection[0].getContext('2d');
     };
@@ -46,11 +50,11 @@ define(['shapes', 'socketio'],
         Shapes.paths[index].forEach(function (value, index, array) {
           if (index == 0) {
             ctx.moveTo(value[0] * $projection.attr('width') + config.offset.x,
-              value[1] * $projection.attr('height') + config.offset.y);
+              (value[1] * ($projection.attr('width') * (9 / 16)) + config.offset.y) * config.stretch.y);
           }
           else {
             ctx.lineTo(value[0] * $projection.attr('width') + config.offset.x,
-              value[1] * $projection.attr('height') + config.offset.y);
+              (value[1] * ($projection.attr('width') * (9 / 16)) + config.offset.y) * config.stretch.y);
           }
         });
         ctx.closePath();
@@ -63,16 +67,40 @@ define(['shapes', 'socketio'],
     var shiftCanvas = function (e) {
       switch (e.which) {
         case 37: // left
-          config.offset.x--;
+          switch(e.shiftKey) {
+            case true:
+              config.stretch.x += 0.005;
+              break;
+            default:
+              config.offset.x--;
+          }
           break;
         case 38: // up
-          config.offset.y--;
+          switch(e.shiftKey) {
+            case true:
+              config.stretch.y += 0.005;
+              break;
+            default:
+              config.offset.y--;
+          }
           break;
         case 39: // right
-          config.offset.x++;
+          switch(e.shiftKey) {
+            case true:
+              config.stretch.x -= 0.005;
+              break;
+            default:
+              config.offset.x++;
+          }
           break;
         case 40: // down
-          config.offset.y++;
+          switch(e.shiftKey) {
+            case true:
+              config.stretch.y -= 0.005;
+              break;
+            default:
+              config.offset.y++;
+          }
           break;
         default:
           return;
