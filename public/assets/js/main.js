@@ -12,12 +12,12 @@ define(['shapes', 'socketio'],
     var setup = function () {
       config = {
         offset: {
-          x: 0,
-          y: 0
+          x: 0, //4,
+          y: 0 //39
         },
         stretch: {
-          x: 1,
-          y: 1
+          x: 0, //0.995,
+          y: 0 //1.18
         }
       };
       $window = $(window);
@@ -49,11 +49,11 @@ define(['shapes', 'socketio'],
         ctx.beginPath();
         Shapes.paths[index].forEach(function (value, index, array) {
           if (index == 0) {
-            ctx.moveTo(value[0] * $projection.attr('width') + config.offset.x,
+            ctx.moveTo(((value[0] * $projection.attr('width') + config.offset.x) * config.stretch.x),
               (value[1] * ($projection.attr('width') * (9 / 16)) + config.offset.y) * config.stretch.y);
           }
           else {
-            ctx.lineTo(value[0] * $projection.attr('width') + config.offset.x,
+            ctx.lineTo(((value[0] * $projection.attr('width') + config.offset.x) * config.stretch.x),
               (value[1] * ($projection.attr('width') * (9 / 16)) + config.offset.y) * config.stretch.y);
           }
         });
