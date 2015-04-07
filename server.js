@@ -13,9 +13,6 @@ sp.on("open", function () {
   console.log('connected');
   sp.on('data', function(data) {
     data = data.split(',');
-    data = data.map(function(num) {
-      return num / 100;
-    });
     console.log(data);
     io.emit('data', data);
   });

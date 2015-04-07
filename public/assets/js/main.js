@@ -2,13 +2,13 @@ requirejs.config({
   baseUrl: '/assets/js',
   paths: {
     "shapes": "shapes",
+    "source": "source",
     "socketio": "/socket.io/socket.io.js"
   }
 });
 
-define(['shapes', 'socketio'],
-  function (Shapes, io) {
-
+define(['shapes', 'socketio', 'source'],
+  function (Shapes, io, Source) {
     var setup = function () {
       config = {
         offset: {
@@ -16,34 +16,39 @@ define(['shapes', 'socketio'],
           y: 0 //39
         },
         stretch: {
-          x: 0, //0.995,
-          y: 0 //1.18
+          x: 1, //0.995,
+          y: 1 //1.18
         }
       };
+      values = [];
       $window = $(window);
       $projection = $('#projection');
-      $video = $('video');
+      console.log('this setup');
       setupCanvas();
       openSocket();
     };
 
     var setupCanvas = function () {
-      $projection.attr('height', $window.height());
-      $projection.attr('width', $window.width());
+      $projection.attr('height', $window.height())
+        .attr('width', $window.width());
+      Source.elements.each(function(index, element) {
+        $(element).attr('height', $window.height())
+          .attr('width', $window.width());
+      });
       ctx = $projection[0].getContext('2d');
     };
 
     var openSocket = function () {
       var socket = io('http://localhost:3006');
       socket.on('data', function (data) {
-        updateSpeed(data);
+        //Source.render(data);
+        values = data;
       });
     };
 
     var render = function () {
-      ctx.rect(0, 0, $projection.attr('width'), $projection.attr('height'));
-      ctx.fillStyle = 'black';
-      ctx.fill();
+      ctx = $projection[0].getContext('2d');
+      ctx.drawImage($('#backgroundCanvas')[0], 0, 0, $projection.attr('width'), $projection.attr('height'));
       Shapes.paths.forEach(function (value, index) {
         ctx.save();
         ctx.beginPath();
@@ -59,7 +64,7 @@ define(['shapes', 'socketio'],
         });
         ctx.closePath();
         ctx.clip();
-        ctx.drawImage($video[index % $video.length], 0, 0, $projection.attr('width'), $projection.attr('height'));
+        ctx.drawImage(Source.elements[index % Source.elements.length], 0, 0, $projection.attr('width'), $projection.attr('height'));
         ctx.restore();
       })
     };
@@ -108,16 +113,11 @@ define(['shapes', 'socketio'],
       e.preventDefault(); // prevent the default action (scroll / move caret)
     };
 
-    var updateSpeed = function (data) {
-      $video[0].playbackRate = data[0];
-      $video[1].playbackRate = data[1];
-      $video[2].playbackRate = data[2];
-    };
-
     var run = function () {
       setup();
 
       setInterval(function () {
+        Source.render(this.values);
         render();
       }, 99);
 
