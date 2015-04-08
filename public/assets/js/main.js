@@ -7,23 +7,14 @@ requirejs.config({
   }
 });
 
-define(['shapes', 'socketio', 'source'],
-  function (Shapes, io, Source) {
+define(['shapes', 'socketio', 'source', 'config'],
+  function (Shapes, io, Source, Config) {
     var setup = function () {
-      config = {
-        offset: {
-          x: 0, //4,
-          y: 0 //39
-        },
-        stretch: {
-          x: 1, //0.995,
-          y: 1 //1.18
-        }
-      };
       values = [];
       $window = $(window);
       $projection = $('#projection');
-      console.log('this setup');
+      Config.animation.height = $projection.height();
+      Config.animation.width = $projection.width();
       setupCanvas();
       openSocket();
     };
@@ -41,7 +32,6 @@ define(['shapes', 'socketio', 'source'],
     var openSocket = function () {
       var socket = io('http://localhost:3006');
       socket.on('data', function (data) {
-        //Source.render(data);
         values = data;
       });
     };
@@ -49,17 +39,21 @@ define(['shapes', 'socketio', 'source'],
     var render = function () {
       ctx = $projection[0].getContext('2d');
       ctx.drawImage($('#backgroundCanvas')[0], 0, 0, $projection.attr('width'), $projection.attr('height'));
+      ctx.font = "900 18px Raleway";
+      ctx.textAlign = "left";
+      ctx.fillStyle = '#999';
+      ctx.fillText(Config.level, 18, 27);
       Shapes.paths.forEach(function (value, index) {
         ctx.save();
         ctx.beginPath();
         Shapes.paths[index].forEach(function (value, index, array) {
           if (index == 0) {
-            ctx.moveTo(((value[0] * $projection.attr('width') + config.offset.x) * config.stretch.x),
-              (value[1] * ($projection.attr('width') * (9 / 16)) + config.offset.y) * config.stretch.y);
+            ctx.moveTo(((value[0] * $projection.attr('width') + Config.offset.x) * Config.stretch.x),
+              (value[1] * ($projection.attr('width') * (9 / 16)) + Config.offset.y) * Config.stretch.y);
           }
           else {
-            ctx.lineTo(((value[0] * $projection.attr('width') + config.offset.x) * config.stretch.x),
-              (value[1] * ($projection.attr('width') * (9 / 16)) + config.offset.y) * config.stretch.y);
+            ctx.lineTo(((value[0] * $projection.attr('width') + Config.offset.x) * Config.stretch.x),
+              (value[1] * ($projection.attr('width') * (9 / 16)) + Config.offset.y) * Config.stretch.y);
           }
         });
         ctx.closePath();
@@ -74,37 +68,37 @@ define(['shapes', 'socketio', 'source'],
         case 37: // left
           switch(e.shiftKey) {
             case true:
-              config.stretch.x += 0.005;
+              Config.stretch.x += 0.005;
               break;
             default:
-              config.offset.x--;
+              Config.offset.x--;
           }
           break;
         case 38: // up
           switch(e.shiftKey) {
             case true:
-              config.stretch.y += 0.005;
+              Config.stretch.y += 0.005;
               break;
             default:
-              config.offset.y--;
+              Config.offset.y--;
           }
           break;
         case 39: // right
           switch(e.shiftKey) {
             case true:
-              config.stretch.x -= 0.005;
+              Config.stretch.x -= 0.005;
               break;
             default:
-              config.offset.x++;
+              Config.offset.x++;
           }
           break;
         case 40: // down
           switch(e.shiftKey) {
             case true:
-              config.stretch.y -= 0.005;
+              Config.stretch.y -= 0.005;
               break;
             default:
-              config.offset.y++;
+              Config.offset.y++;
           }
           break;
         default:
@@ -122,7 +116,14 @@ define(['shapes', 'socketio', 'source'],
       }, 99);
 
       $(document).keydown(function (e) {
-        shiftCanvas(e)
+        shiftCanvas(e);
+        switch (e.which) {
+          case 13: // left
+            Source.levelUp();
+            break;
+          default:
+            return;
+        }
       });
     };
 
