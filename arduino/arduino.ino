@@ -6,7 +6,7 @@ void setup() {
 
 void loop() {
   for (int i = 0; i < 3; i = i + 1) {
-    int speed = map(analogRead(potPins[i]), 0, 1023, 0, 33);
+    int speed = analogRead(potPins[i]);
     Serial.print(speed);
     if(i < 2) Serial.print(',');
   }

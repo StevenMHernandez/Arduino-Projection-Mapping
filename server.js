@@ -25,7 +25,3 @@ server.listen(3006);
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/public/index.html');
 });
-
-app.get('/getPaths', function (req, res) {
-  res.sendfile(__dirname + '/public/getPaths.html');
-});
