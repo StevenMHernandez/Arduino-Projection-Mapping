@@ -1,6 +1,8 @@
 * {
     overflow: hidden;
+    cursor: none;
 }
+
 body, html {
     background: #000;
     height: 100%;
@@ -8,6 +10,7 @@ body, html {
     padding: 0;
     margin: 0;
 }
+
 .ie {
     height: 1px;
     width: 1px;
