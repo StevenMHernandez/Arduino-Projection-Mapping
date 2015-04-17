@@ -24,6 +24,6 @@ Unfortunately the server does not immediately receive data from the Arduino.
 
 Head back to the Arduino IDE and open up the Serial Monitor `Tools > Serial Monitor`
 
-After this, some jumbled mess should begin printing to the terminal that the server was started on. Close the Serial Monitor and the terminal should begin printing an array of three values.
+After this, some jumbled mess should begin printing to the terminal that the server was started on. Close the Serial Monitor.
 
 Open `localhost:3006`

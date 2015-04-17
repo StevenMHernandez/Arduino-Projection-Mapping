@@ -1,4 +1,4 @@
-define(['config'], function (Config) {
+define(function () {
   var generate = function (obj) {
     switch (obj.waveform.type) {
       case 'random':

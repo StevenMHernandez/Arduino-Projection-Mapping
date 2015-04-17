@@ -1,11 +1,4 @@
-define(['config'], function (Config) {
-  this.randomWord = function () {
-    var random = Math.floor(Math.random() * Config.words.length);
-    var randomWord = Config.words[random];
-    Config.words.splice(random, 1);
-    return randomWord;
-  };
-
+define(function () {
   return [
     {
       //level 0
@@ -20,7 +13,7 @@ define(['config'], function (Config) {
     },
     {
       //level 1
-      word: randomWord(),
+      word: 'fashionable',
       columns: {
         count: 200
       },
@@ -32,7 +25,7 @@ define(['config'], function (Config) {
     },
     {
       //level 2
-      word: randomWord(),
+      word: 'leaseholder',
       columns: {
         count: 100
       },
@@ -91,7 +84,7 @@ define(['config'], function (Config) {
     },
     {
       //level 7
-      word: randomWord(),
+      word: 'coordination',
       columns: {
         count: 200
       },
@@ -112,5 +105,4 @@ define(['config'], function (Config) {
         amplitude: 88
       }
     }
-  ];
-});
+]});

@@ -22,7 +22,7 @@ define(['shapes', 'socketio', 'source', 'config'],
     var setupCanvas = function () {
       $projection.attr('height', $window.height())
         .attr('width', $window.width());
-      Source.elements.each(function(index, element) {
+      Source.elements.each(function (index, element) {
         $(element).attr('height', $window.height())
           .attr('width', $window.width());
       });
@@ -66,36 +66,36 @@ define(['shapes', 'socketio', 'source', 'config'],
     var shiftCanvas = function (e) {
       switch (e.which) {
         case 37: // left
-          switch(e.shiftKey) {
+          switch (e.shiftKey) {
             case true:
-              Config.stretch.x += 0.005;
+              Config.stretch.x -= 0.005;
               break;
             default:
               Config.offset.x--;
           }
           break;
         case 38: // up
-          switch(e.shiftKey) {
+          switch (e.shiftKey) {
             case true:
-              Config.stretch.y += 0.005;
+              Config.stretch.y -= 0.005;
               break;
             default:
               Config.offset.y--;
           }
           break;
         case 39: // right
-          switch(e.shiftKey) {
+          switch (e.shiftKey) {
             case true:
-              Config.stretch.x -= 0.005;
+              Config.stretch.x += 0.005;
               break;
             default:
               Config.offset.x++;
           }
           break;
         case 40: // down
-          switch(e.shiftKey) {
+          switch (e.shiftKey) {
             case true:
-              Config.stretch.y -= 0.005;
+              Config.stretch.y += 0.005;
               break;
             default:
               Config.offset.y++;
@@ -104,26 +104,25 @@ define(['shapes', 'socketio', 'source', 'config'],
         default:
           return;
       }
-      e.preventDefault(); // prevent the default action (scroll / move caret)
     };
 
     var run = function () {
       setup();
-
       setInterval(function () {
         Source.render(this.values);
         render();
-      }, 99);
+      }, 10);
 
       $(document).keydown(function (e) {
         shiftCanvas(e);
         switch (e.which) {
-          case 13: // left
+          case 13: //enter
             Source.levelUp();
             break;
           default:
             return;
         }
+        e.preventDefault();
       });
     };
 

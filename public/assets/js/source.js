@@ -4,9 +4,6 @@ define(['config', 'waveform', 'level'], function (Config, Waveform, Level) {
   var $boilerPlate = {};
 
   this.levelUp = function() {
-    //// This version would reset to level 0 after final level
-    //Config.level = Config.level == Level.length - 1 ? 0 : Config.level + 1;
-    //// Instead this stops after the final level
     if(Config.level != Level.length - 1) {
       Config.level++;
       reset();
@@ -61,13 +58,9 @@ define(['config', 'waveform', 'level'], function (Config, Waveform, Level) {
 
   this.render = function (data) {
     self = this;
-    this.elements.each(function (index, element) {
-      //place boilerplate image
+    this.elements.each(function (index) {
       $(self.elements[index])[0].getContext('2d').drawImage($boilerPlate[0], 0, 0);
-      // offset waveform
-      waveform = offset(Config.waveforms[index],
-        map_int(data[index], Level[Config.level].columns.count));
-      // shift
+      waveform = offset(Config.waveforms[index], map_int(data[index], Level[Config.level].columns.count));
       shift($(self.elements[index])[0].getContext('2d'), waveform);
     });
   };
